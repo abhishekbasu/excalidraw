@@ -14,10 +14,11 @@ export const useHandleAppTheme = () => {
       (localStorage.getItem(STORAGE_KEYS.LOCAL_STORAGE_THEME) as
         | Theme
         | "system"
-        | null) || THEME.LIGHT
+        | null) || THEME.DARK
     );
   });
-  const [editorTheme, setEditorTheme] = useState<Theme>(THEME.LIGHT);
+  // Gruvbox build: default to dark so the app opens in gruvbox dark.
+  const [editorTheme, setEditorTheme] = useState<Theme>(THEME.DARK);
 
   useEffect(() => {
     const mediaQuery = getDarkThemeMediaQuery();

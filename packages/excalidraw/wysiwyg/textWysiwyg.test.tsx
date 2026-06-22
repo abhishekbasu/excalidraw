@@ -1096,13 +1096,13 @@ describe("textWysiwyg", () => {
 
       expect(h.state.editingTextElement).toBe(null);
 
-      expect(text.fontFamily).toEqual(FONT_FAMILY.Excalifont);
+      expect(text.fontFamily).toEqual(FONT_FAMILY["D2 Coding Ligature"]);
 
-      fireEvent.click(screen.getByTitle(/code/i));
+      fireEvent.click(screen.getByTitle(/normal/i));
 
       expect(
         (h.elements[1] as ExcalidrawTextElementWithContainer).fontFamily,
-      ).toEqual(FONT_FAMILY["Comic Shanns"]);
+      ).toEqual(FONT_FAMILY.Nunito);
 
       //undo
       Keyboard.withModifierKeys({ ctrl: true }, () => {
@@ -1110,7 +1110,7 @@ describe("textWysiwyg", () => {
       });
       expect(
         (h.elements[1] as ExcalidrawTextElementWithContainer).fontFamily,
-      ).toEqual(FONT_FAMILY.Excalifont);
+      ).toEqual(FONT_FAMILY["D2 Coding Ligature"]);
 
       //redo
       Keyboard.withModifierKeys({ ctrl: true, shift: true }, () => {
@@ -1118,7 +1118,7 @@ describe("textWysiwyg", () => {
       });
       expect(
         (h.elements[1] as ExcalidrawTextElementWithContainer).fontFamily,
-      ).toEqual(FONT_FAMILY["Comic Shanns"]);
+      ).toEqual(FONT_FAMILY.Nunito);
     });
 
     it("should wrap text and vertcially center align once text submitted", async () => {
@@ -1528,7 +1528,7 @@ describe("textWysiwyg", () => {
 
       expect(
         (h.elements[1] as ExcalidrawTextElementWithContainer).fontFamily,
-      ).toEqual(FONT_FAMILY["Comic Shanns"]);
+      ).toEqual(FONT_FAMILY["D2 Coding Ligature"]);
       expect(getOriginalContainerHeightFromCache(rectangle.id)).toBe(75);
 
       fireEvent.click(screen.getByTitle(/Very large/i));
@@ -1555,7 +1555,7 @@ describe("textWysiwyg", () => {
       fireEvent.click(screen.getByTitle(/code/i));
       expect(
         (h.elements[1] as ExcalidrawTextElementWithContainer).fontFamily,
-      ).toEqual(FONT_FAMILY["Comic Shanns"]);
+      ).toEqual(FONT_FAMILY["D2 Coding Ligature"]);
       expect(
         (h.elements[1] as ExcalidrawTextElementWithContainer).lineHeight,
       ).toEqual(1.25);
@@ -1743,7 +1743,7 @@ describe("textWysiwyg", () => {
           opacity: 100,
           roughness: 1,
           roundness: null,
-          strokeColor: "#1e1e1e",
+          strokeColor: "#ebdbb2",
           strokeStyle: "solid",
           strokeWidth: 2,
           type: "rectangle",

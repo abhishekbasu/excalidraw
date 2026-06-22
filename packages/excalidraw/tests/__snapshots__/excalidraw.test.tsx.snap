@@ -633,14 +633,14 @@ exports[`<Excalidraw/> > Test UIOptions prop > Test canvasActions > should rende
       style="height: 1px; margin: 6px 0px; flex: 0 0 auto;"
     />
     <button
-      aria-label="Dark mode"
+      aria-label="Light mode"
       class="radix-menu-item dropdown-menu-item dropdown-menu-item-base"
       data-orientation="vertical"
       data-radix-collection-item=""
       data-testid="toggle-dark-mode"
       role="menuitem"
       tabindex="-1"
-      title="Dark mode"
+      title="Light mode"
     >
       <div
         class="dropdown-menu-item__icon"
@@ -654,13 +654,17 @@ exports[`<Excalidraw/> > Test UIOptions prop > Test canvasActions > should rende
           stroke="currentColor"
           stroke-linecap="round"
           stroke-linejoin="round"
+          stroke-width="1.5"
           viewBox="0 0 20 20"
         >
-          <path
-            clip-rule="evenodd"
-            d="M10 2.5h.328a6.25 6.25 0 0 0 6.6 10.372A7.5 7.5 0 1 1 10 2.493V2.5Z"
+          <g
             stroke="currentColor"
-          />
+            stroke-linejoin="round"
+          >
+            <path
+              d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM10 4.167V2.5M14.167 5.833l1.166-1.166M15.833 10H17.5M14.167 14.167l1.166 1.166M10 15.833V17.5M5.833 14.167l-1.166 1.166M5 10H3.333M5.833 5.833 4.667 4.667"
+            />
+          </g>
         </svg>
       </div>
       <div
@@ -669,7 +673,7 @@ exports[`<Excalidraw/> > Test UIOptions prop > Test canvasActions > should rende
         <span
           style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"
         >
-          Dark mode
+          Light mode
         </span>
       </div>
       <div
@@ -700,10 +704,10 @@ exports[`<Excalidraw/> > Test UIOptions prop > Test canvasActions > should rende
               class="color-picker__top-picks"
             >
               <button
-                class="color-picker__button active has-outline"
-                data-testid="color-top-pick-#ffffff"
-                style="--swatch-color: #ffffff;"
-                title="#ffffff"
+                class="color-picker__button active"
+                data-testid="color-top-pick-#282828"
+                style="--swatch-color: #282828;"
+                title="#282828"
                 type="button"
               >
                 <div
@@ -711,10 +715,10 @@ exports[`<Excalidraw/> > Test UIOptions prop > Test canvasActions > should rende
                 />
               </button>
               <button
-                class="color-picker__button has-outline"
-                data-testid="color-top-pick-#f8f9fa"
-                style="--swatch-color: #f8f9fa;"
-                title="#f8f9fa"
+                class="color-picker__button"
+                data-testid="color-top-pick-#1d2021"
+                style="--swatch-color: #1d2021;"
+                title="#1d2021"
                 type="button"
               >
                 <div
@@ -722,10 +726,10 @@ exports[`<Excalidraw/> > Test UIOptions prop > Test canvasActions > should rende
                 />
               </button>
               <button
-                class="color-picker__button has-outline"
-                data-testid="color-top-pick-#f5faff"
-                style="--swatch-color: #f5faff;"
-                title="#f5faff"
+                class="color-picker__button"
+                data-testid="color-top-pick-#32302f"
+                style="--swatch-color: #32302f;"
+                title="#32302f"
                 type="button"
               >
                 <div
@@ -733,10 +737,10 @@ exports[`<Excalidraw/> > Test UIOptions prop > Test canvasActions > should rende
                 />
               </button>
               <button
-                class="color-picker__button has-outline"
-                data-testid="color-top-pick-#fffce8"
-                style="--swatch-color: #fffce8;"
-                title="#fffce8"
+                class="color-picker__button"
+                data-testid="color-top-pick-#3c3836"
+                style="--swatch-color: #3c3836;"
+                title="#3c3836"
                 type="button"
               >
                 <div
@@ -744,10 +748,10 @@ exports[`<Excalidraw/> > Test UIOptions prop > Test canvasActions > should rende
                 />
               </button>
               <button
-                class="color-picker__button has-outline"
-                data-testid="color-top-pick-#fdf8f6"
-                style="--swatch-color: #fdf8f6;"
-                title="#fdf8f6"
+                class="color-picker__button"
+                data-testid="color-top-pick-#fbf1c7"
+                style="--swatch-color: #fbf1c7;"
+                title="#fbf1c7"
                 type="button"
               >
                 <div
@@ -763,10 +767,10 @@ exports[`<Excalidraw/> > Test UIOptions prop > Test canvasActions > should rende
               aria-expanded="false"
               aria-haspopup="dialog"
               aria-label="Canvas background"
-              class="color-picker__button active-color properties-trigger has-outline"
+              class="color-picker__button active-color properties-trigger"
               data-openpopup="canvasBackground"
               data-state="closed"
-              style="--swatch-color: #ffffff;"
+              style="--swatch-color: #282828;"
               title="Show background color picker"
               type="button"
             >

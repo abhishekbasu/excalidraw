@@ -109,18 +109,12 @@ export default defineConfig(({ mode }) => {
               // Taking the substring after "locales/"
               return `locales/${id.substring(index + 8)}`;
             }
-
-            if (id.includes("@excalidraw/mermaid-to-excalidraw")) {
-              return "mermaid-to-excalidraw";
-            }
-
-            if (id.includes("@codemirror/") || id.includes("@lezer/")) {
-              return "codemirror.chunk";
-            }
           },
         },
       },
-      sourcemap: true,
+      // no source maps in the production build — keeps the build/deploy lean
+      // (≈20 MB of .map files). Re-enable if you wire up Sentry symbolication.
+      sourcemap: false,
       // don't auto-inline small assets (i.e. fonts hosted on CDN)
       assetsInlineLimit: 0,
     },
@@ -219,10 +213,10 @@ export default defineConfig(({ mode }) => {
           maximumFileSizeToCacheInBytes: 2.3 * 1024 ** 2, // 2.3MB
         },
         manifest: {
-          short_name: "Excalidraw",
-          name: "Excalidraw",
+          short_name: "Basudraw",
+          name: "Basudraw",
           description:
-            "Excalidraw is a whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.",
+            "Basudraw is a whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.",
           icons: [
             {
               src: "android-chrome-192x192.png",

@@ -268,7 +268,7 @@ describe("<Excalidraw/>", () => {
   describe("Test theme prop", () => {
     it("should show the theme toggle by default", async () => {
       const { container } = await render(<Excalidraw />);
-      expect(h.state.theme).toBe(THEME.LIGHT);
+      expect(h.state.theme).toBe(THEME.DARK);
       //open menu
       toggleMenu(container);
       const darkModeToggle = queryByTestId(container, "toggle-dark-mode");
@@ -444,17 +444,17 @@ describe("<Excalidraw/>", () => {
       //open menu
       toggleMenu(container);
 
-      expect(h.state.theme).toBe(THEME.LIGHT);
+      expect(h.state.theme).toBe(THEME.DARK);
 
       expect(
         queryByTestId(container, "toggle-dark-mode")?.textContent,
-      ).toContain(t("buttons.darkMode"));
+      ).toContain(t("buttons.lightMode"));
 
       fireEvent.click(queryByTestId(container, "toggle-dark-mode")!);
 
       expect(
         queryByTestId(container, "toggle-dark-mode")?.textContent,
-      ).toContain(t("buttons.lightMode"));
+      ).toContain(t("buttons.darkMode"));
     });
 
     it("should show theme toggle when the theme prop and onThemeChange are defined", async () => {

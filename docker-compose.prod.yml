@@ -1,0 +1,29 @@
+# Lean production hosting for Basudraw: a single Caddy container serves the
+# pre-built static site and handles HTTPS. No app build happens on the box —
+# build locally (or in CI) with `make build` and ship ./excalidraw-app/build.
+#
+#   # HTTP only (access by IP):
+#   docker compose -f docker-compose.prod.yml up -d
+#
+#   # Automatic HTTPS (domain pointed at the box, ports 80/443 open):
+#   DOMAIN=draw.example.com docker compose -f docker-compose.prod.yml up -d
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: basudraw
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      # a domain => automatic Let's Encrypt HTTPS; ":80" => plain HTTP on port 80
+      - SITE_ADDRESS=${DOMAIN:-:80}
+    volumes:
+      - ./excalidraw-app/build:/srv:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
