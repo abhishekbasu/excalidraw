@@ -80,6 +80,7 @@ const getFontFamilyIcon = (fontFamily: FontFamilyValues): JSX.Element => {
     case FONT_FAMILY["Lilita One"]:
       return FontFamilyHeadingIcon;
     case FONT_FAMILY["Comic Shanns"]:
+    case FONT_FAMILY["D2 Coding Ligature"]:
     case FONT_FAMILY.Cascadia:
       return FontFamilyCodeIcon;
     default:

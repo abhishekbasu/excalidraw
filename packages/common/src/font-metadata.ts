@@ -65,6 +65,17 @@ export const FONT_METADATA: Record<number, FontMetadata> = {
       lineHeight: 1.25,
     },
   },
+  [FONT_FAMILY["D2 Coding Ligature"]]: {
+    metrics: {
+      // D2Coding Ver1.3.2 (head.unitsPerEm, hhea.ascent/descent).
+      // lineHeight kept at 1.25 to match the other monospace font (Comic Shanns)
+      // and Excalidraw's default text spacing.
+      unitsPerEm: 1000,
+      ascender: 850,
+      descender: -230,
+      lineHeight: 1.25,
+    },
+  },
   [FONT_FAMILY.Virgil]: {
     metrics: {
       unitsPerEm: 1000,
@@ -110,15 +121,6 @@ export const FONT_METADATA: Record<number, FontMetadata> = {
       lineHeight: 1.25,
     },
     private: true,
-  },
-  [FONT_FAMILY_FALLBACKS.Xiaolai]: {
-    metrics: {
-      unitsPerEm: 1000,
-      ascender: 880,
-      descender: -144,
-      lineHeight: 1.25,
-    },
-    fallback: true,
   },
   [FONT_FAMILY_FALLBACKS["Segoe UI Emoji"]]: {
     metrics: {

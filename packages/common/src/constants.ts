@@ -116,7 +116,6 @@ export const FONT_SIZES = {
   xl: 36,
 } as const;
 
-export const CJK_HAND_DRAWN_FALLBACK_FONT = "Xiaolai";
 export const WINDOWS_EMOJI_FALLBACK_FONT = "Segoe UI Emoji";
 
 /**
@@ -138,6 +137,7 @@ export const FONT_FAMILY = {
   "Comic Shanns": 8,
   "Liberation Sans": 9,
   Assistant: 10,
+  "D2 Coding Ligature": 11,
 };
 
 // Segoe UI Emoji fails to properly fallback for some glyphs: ∞, ∫, ≠
@@ -151,7 +151,6 @@ export const FONT_FAMILY_GENERIC_FALLBACKS = {
 };
 
 export const FONT_FAMILY_FALLBACKS = {
-  [CJK_HAND_DRAWN_FALLBACK_FONT]: 100,
   ...FONT_FAMILY_GENERIC_FALLBACKS,
   [WINDOWS_EMOJI_FALLBACK_FONT]: 1000,
 };
@@ -162,6 +161,7 @@ export function getGenericFontFamilyFallback(
   switch (fontFamily) {
     case FONT_FAMILY.Cascadia:
     case FONT_FAMILY["Comic Shanns"]:
+    case FONT_FAMILY["D2 Coding Ligature"]:
       return MONOSPACE_GENERIC_FONT;
 
     default:
@@ -174,16 +174,9 @@ export const getFontFamilyFallbacks = (
 ): Array<keyof typeof FONT_FAMILY_FALLBACKS> => {
   const genericFallbackFont = getGenericFontFamilyFallback(fontFamily);
 
-  switch (fontFamily) {
-    case FONT_FAMILY.Excalifont:
-      return [
-        CJK_HAND_DRAWN_FALLBACK_FONT,
-        genericFallbackFont,
-        WINDOWS_EMOJI_FALLBACK_FONT,
-      ];
-    default:
-      return [genericFallbackFont, WINDOWS_EMOJI_FALLBACK_FONT];
-  }
+  // CJK text falls back to the browser's own fonts (the bundled hand-drawn CJK
+  // font was removed to keep the build lean).
+  return [genericFallbackFont, WINDOWS_EMOJI_FALLBACK_FONT];
 };
 
 export const THEME = {
@@ -191,7 +184,8 @@ export const THEME = {
   DARK: "dark",
 } as const;
 
-export const DARK_THEME_FILTER = "invert(93%) hue-rotate(180deg)";
+// Gruvbox build: images are not inverted in dark mode — authentic colors only.
+export const DARK_THEME_FILTER = "none";
 
 export const FRAME_STYLE = {
   strokeColor: "#bbb" as ExcalidrawElement["strokeColor"],
@@ -211,7 +205,8 @@ export const FRAME_STYLE = {
 
 export const MIN_FONT_SIZE = 1;
 export const DEFAULT_FONT_SIZE = 20;
-export const DEFAULT_FONT_FAMILY: FontFamilyValues = FONT_FAMILY.Excalifont;
+export const DEFAULT_FONT_FAMILY: FontFamilyValues =
+  FONT_FAMILY["D2 Coding Ligature"];
 export const DEFAULT_TEXT_ALIGN = "left";
 export const DEFAULT_VERTICAL_ALIGN = "top";
 export const DEFAULT_VERSION = "{version}";
@@ -420,7 +415,7 @@ export const DEFAULT_ELEMENT_PROPS: {
   opacity: ExcalidrawElement["opacity"];
   locked: ExcalidrawElement["locked"];
 } = {
-  strokeColor: COLOR_PALETTE.black,
+  strokeColor: "#ebdbb2", // gruvbox fg1 (light ink for the dark canvas)
   backgroundColor: COLOR_PALETTE.transparent,
   fillStyle: "solid",
   strokeWidth: 2,

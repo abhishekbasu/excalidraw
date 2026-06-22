@@ -111,7 +111,8 @@ const checkpoint = (name: string) => {
 const renderStaticScene = vi.spyOn(StaticScene, "renderStaticScene");
 
 const transparent = COLOR_PALETTE.transparent;
-const black = COLOR_PALETTE.black;
+// gruvbox build: default element stroke is the light foreground, not black
+const black = "#ebdbb2";
 const red = COLOR_PALETTE.red[DEFAULT_ELEMENT_BACKGROUND_COLOR_INDEX];
 const blue = COLOR_PALETTE.blue[DEFAULT_ELEMENT_BACKGROUND_COLOR_INDEX];
 const yellow = COLOR_PALETTE.yellow[DEFAULT_ELEMENT_BACKGROUND_COLOR_INDEX];

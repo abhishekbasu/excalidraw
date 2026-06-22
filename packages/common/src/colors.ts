@@ -1,117 +1,17 @@
 import tinycolor from "tinycolor2";
 
-import { clamp } from "@excalidraw/math";
-import { degreesToRadians } from "@excalidraw/math";
-
-import type { Degrees } from "@excalidraw/math";
-
 // ---------------------------------------------------------------------------
 // Dark mode color transformation
 // ---------------------------------------------------------------------------
 
-// Browser-only cache to avoid memory leaks on server
-const DARK_MODE_COLORS_CACHE: Map<string, string> | null =
-  typeof window !== "undefined" ? new Map() : null;
-
-function cssHueRotate(
-  red: number,
-  green: number,
-  blue: number,
-  degrees: Degrees,
-): { r: number; g: number; b: number } {
-  // normalize
-  const r = red / 255;
-  const g = green / 255;
-  const b = blue / 255;
-
-  // Convert degrees to radians
-  const a = degreesToRadians(degrees);
-
-  const c = Math.cos(a);
-  const s = Math.sin(a);
-
-  // rotation matrix
-  const matrix = [
-    0.213 + c * 0.787 - s * 0.213,
-    0.715 - c * 0.715 - s * 0.715,
-    0.072 - c * 0.072 + s * 0.928,
-    0.213 - c * 0.213 + s * 0.143,
-    0.715 + c * 0.285 + s * 0.14,
-    0.072 - c * 0.072 - s * 0.283,
-    0.213 - c * 0.213 - s * 0.787,
-    0.715 - c * 0.715 + s * 0.715,
-    0.072 + c * 0.928 + s * 0.072,
-  ];
-
-  // transform
-  const newR = r * matrix[0] + g * matrix[1] + b * matrix[2];
-  const newG = r * matrix[3] + g * matrix[4] + b * matrix[5];
-  const newB = r * matrix[6] + g * matrix[7] + b * matrix[8];
-
-  // clamp the values to [0, 1] range and convert back to [0, 255]
-  return {
-    r: Math.round(Math.max(0, Math.min(1, newR)) * 255),
-    g: Math.round(Math.max(0, Math.min(1, newG)) * 255),
-    b: Math.round(Math.max(0, Math.min(1, newB)) * 255),
-  };
-}
-
-const cssInvert = (
-  r: number,
-  g: number,
-  b: number,
-  percent: number,
-): { r: number; g: number; b: number } => {
-  const p = clamp(percent, 0, 100) / 100;
-
-  // Function to invert a single color component
-  const invertComponent = (color: number): number => {
-    // Apply the invert formula
-    const inverted = color * (1 - p) + (255 - color) * p;
-    // Round to the nearest integer and clamp to [0, 255]
-    return Math.round(clamp(inverted, 0, 255));
-  };
-
-  // Calculate the inverted RGB components
-  const invertedR = invertComponent(r);
-  const invertedG = invertComponent(g);
-  const invertedB = invertComponent(b);
-
-  return { r: invertedR, g: invertedG, b: invertedB };
-};
-
-export const applyDarkModeFilter = (color: string, enable = true): string => {
-  if (!enable) {
-    return color;
-  }
-
-  const cached = DARK_MODE_COLORS_CACHE?.get(color);
-  if (cached) {
-    return cached;
-  }
-
-  const tc = tinycolor(color);
-  const alpha = tc.getAlpha();
-
-  // order of operations matters
-  // (corresponds to "filter: invert(invertPercent) hue-rotate(hueDegrees)" in css)
-  const rgb = tc.toRgb();
-  const inverted = cssInvert(rgb.r, rgb.g, rgb.b, 93);
-  const rotated = cssHueRotate(
-    inverted.r,
-    inverted.g,
-    inverted.b,
-    180 as Degrees,
-  );
-
-  const result = rgbToHex(rotated.r, rotated.g, rotated.b, alpha);
-
-  if (DARK_MODE_COLORS_CACHE) {
-    DARK_MODE_COLORS_CACHE.set(color, result);
-  }
-
-  return result;
-};
+/**
+ * Gruvbox build: both light and dark themes use authentic, hand-picked colors,
+ * so the legacy "dark mode" invert + hue-rotate transform is intentionally
+ * disabled — it would hue-shift the curated gruvbox accent colors. Kept as an
+ * identity function to preserve the public API and all existing call sites.
+ */
+export const applyDarkModeFilter = (color: string, _enable = true): string =>
+  color;
 
 // ---------------------------------------------------------------------------
 // Color palette
@@ -146,23 +46,22 @@ export const DEFAULT_ELEMENT_BACKGROUND_COLOR_INDEX = 1;
 
 export const COLOR_PALETTE = {
   transparent: "transparent",
-  black: "#1e1e1e",
-  white: "#ffffff",
-  // open-color from https://github.com/yeun/open-color/blob/master/open-color.js
-  // corresponds to indexes [0,2,4,6,8] (weights: 50, 200, 400, 600, 800)
-  gray: ["#f8f9fa", "#e9ecef", "#ced4da", "#868e96", "#343a40"],
-  red: ["#fff5f5", "#ffc9c9", "#ff8787", "#fa5252", "#e03131"],
-  pink: ["#fff0f6", "#fcc2d7", "#f783ac", "#e64980", "#c2255c"],
-  grape: ["#f8f0fc", "#eebefa", "#da77f2", "#be4bdb", "#9c36b5"],
-  violet: ["#f3f0ff", "#d0bfff", "#9775fa", "#7950f2", "#6741d9"],
-  blue: ["#e7f5ff", "#a5d8ff", "#4dabf7", "#228be6", "#1971c2"],
-  cyan: ["#e3fafc", "#99e9f2", "#3bc9db", "#15aabf", "#0c8599"],
-  teal: ["#e6fcf5", "#96f2d7", "#38d9a9", "#12b886", "#099268"],
-  green: ["#ebfbee", "#b2f2bb", "#69db7c", "#40c057", "#2f9e44"],
-  yellow: ["#fff9db", "#ffec99", "#ffd43b", "#fab005", "#f08c00"],
-  orange: ["#fff4e6", "#ffd8a8", "#ffa94d", "#fd7e14", "#e8590c"],
-  // radix bronze shades [3,5,7,9,11]
-  bronze: ["#f8f1ee", "#eaddd7", "#d2bab0", "#a18072", "#846358"],
+  black: "#282828", // gruvbox bg0 (near-black swatch)
+  white: "#fbf1c7", // gruvbox light fg0 (cream)
+  // gruvbox palette — 5-shade ramps (dark/faded → bright accent).
+  // index 4 (brightest) feeds stroke picks; index 1 (dim) feeds background fills.
+  gray: ["#504945", "#665c54", "#7c6f64", "#928374", "#a89984"],
+  red: ["#79140c", "#9d0006", "#cc241d", "#e03e2f", "#fb4934"],
+  pink: ["#6d2f57", "#8f3f71", "#b16286", "#c27490", "#d3869b"],
+  grape: ["#6d2f57", "#8f3f71", "#b16286", "#c27490", "#d3869b"],
+  violet: ["#6d2f57", "#8f3f71", "#b16286", "#c27490", "#d3869b"],
+  blue: ["#0b4f5e", "#076678", "#458588", "#669589", "#83a598"],
+  cyan: ["#0b4f5e", "#076678", "#458588", "#669589", "#83a598"],
+  teal: ["#386648", "#427b58", "#689d6a", "#7bae73", "#8ec07c"],
+  green: ["#5a5a0e", "#79740e", "#98971a", "#a8a720", "#b8bb26"],
+  yellow: ["#7c5215", "#b57614", "#d79921", "#e8aa28", "#fabd2f"],
+  orange: ["#7c2d12", "#af3a03", "#d65d0e", "#ec7016", "#fe8019"],
+  bronze: ["#504945", "#665c54", "#7c6f64", "#928374", "#a89984"],
 } as const;
 
 export type ColorPalette = typeof COLOR_PALETTE;
@@ -186,33 +85,29 @@ const COMMON_ELEMENT_SHADES = pick(COLOR_PALETTE, [
 
 // ORDER matters for positioning in quick picker
 export const DEFAULT_ELEMENT_STROKE_PICKS = [
-  COLOR_PALETTE.black,
-  COLOR_PALETTE.red[DEFAULT_ELEMENT_STROKE_COLOR_INDEX],
-  COLOR_PALETTE.green[DEFAULT_ELEMENT_STROKE_COLOR_INDEX],
-  COLOR_PALETTE.blue[DEFAULT_ELEMENT_STROKE_COLOR_INDEX],
-  COLOR_PALETTE.yellow[DEFAULT_ELEMENT_STROKE_COLOR_INDEX],
+  "#ebdbb2", // gruvbox fg1 (default ink)
+  "#fb4934", // bright red
+  "#b8bb26", // bright green
+  "#83a598", // bright blue
+  "#fabd2f", // bright yellow
 ] as ColorTuple;
 
 // ORDER matters for positioning in quick picker
 export const DEFAULT_ELEMENT_BACKGROUND_PICKS = [
   COLOR_PALETTE.transparent,
-  COLOR_PALETTE.red[DEFAULT_ELEMENT_BACKGROUND_COLOR_INDEX],
-  COLOR_PALETTE.green[DEFAULT_ELEMENT_BACKGROUND_COLOR_INDEX],
-  COLOR_PALETTE.blue[DEFAULT_ELEMENT_BACKGROUND_COLOR_INDEX],
-  COLOR_PALETTE.yellow[DEFAULT_ELEMENT_BACKGROUND_COLOR_INDEX],
+  "#cc241d", // neutral red
+  "#98971a", // neutral green
+  "#458588", // neutral blue
+  "#d79921", // neutral yellow
 ] as ColorTuple;
 
 // ORDER matters for positioning in quick picker
 export const DEFAULT_CANVAS_BACKGROUND_PICKS = [
-  COLOR_PALETTE.white,
-  // radix slate2
-  "#f8f9fa",
-  // radix blue2
-  "#f5faff",
-  // radix yellow2
-  "#fffce8",
-  // radix bronze2
-  "#fdf8f6",
+  "#282828", // gruvbox bg0
+  "#1d2021", // gruvbox bg0_hard
+  "#32302f", // gruvbox bg0_soft
+  "#3c3836", // gruvbox bg1
+  "#fbf1c7", // gruvbox light bg (for light theme)
 ] as ColorTuple;
 
 // palette defaults

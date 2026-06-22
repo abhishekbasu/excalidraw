@@ -165,6 +165,41 @@
   --color-badge: #0b6513;
   --background-color-badge: #d3ffd2;
 
+  // --- gruvbox light theme overrides ---
+  --default-bg-color: #f9f5d7;
+  --input-bg-color: #fbf1c7;
+  --input-border-color: #d5c4a1;
+  --input-hover-bg-color: #f2e5bc;
+  --input-label-color: #504945;
+  --island-bg-color: #fbf1c7;
+  --island-bg-color-alt: #f2e5bc;
+  --popup-secondary-bg-color: #ebdbb2;
+  --popup-text-color: #3c3836;
+  --link-color: #076678;
+  --link-color-hover: #084e5c;
+  --select-highlight-color: #076678;
+  --focus-highlight-color: #d65d0e;
+  --color-selection: #af3a03;
+  --color-primary: #af3a03;
+  --color-primary-darker: #9d3204;
+  --color-primary-darkest: #7c2d12;
+  --color-primary-light: #f2e5bc;
+  --color-primary-light-darker: #ebdbb2;
+  --color-primary-hover: #9d3204;
+  --color-brand-hover: #9d3204;
+  --color-brand-active: #7c2d12;
+  --color-surface-high: #ebdbb2;
+  --color-surface-mid: #f2e5bc;
+  --color-surface-low: #ebdbb2;
+  --color-surface-lowest: #fbf1c7;
+  --color-on-surface: #3c3836;
+  --color-on-primary-container: #3c2a00;
+  --color-surface-primary-container: #fbe3b8;
+  --icon-green-fill-color: #79740e;
+  --color-danger: #9d0006;
+  --keybinding-color: #7c6f64;
+  --color-logo-text: #3c3836;
+
   @include isMobile {
     --editor-container-padding: 0.75rem;
   }
@@ -277,5 +312,48 @@
     --color-border-outline: #8e8d9c;
     --color-border-outline-variant: #46464f;
     --color-surface-primary-container: #403e6a;
+
+    // --- gruvbox dark theme overrides ---
+    --theme-filter: none;
+    --default-bg-color: #1d2021;
+    --input-bg-color: #282828;
+    --input-border-color: #504945;
+    --input-hover-bg-color: #32302f;
+    --input-label-color: #d5c4a1;
+    --island-bg-color: #3c3836;
+    --island-bg-color-alt: #32302f;
+    --popup-secondary-bg-color: #504945;
+    --popup-text-color: #ebdbb2;
+    --popup-text-inverted-color: #282828;
+    --link-color: #83a598;
+    --select-highlight-color: #83a598;
+    --focus-highlight-color: #fe8019;
+    --color-selection: #fe8019;
+    --color-primary: #fe8019;
+    --color-primary-darker: #fe9a47;
+    --color-primary-darkest: #feb47b;
+    --color-primary-light: #504945;
+    --color-primary-light-darker: #3c3836;
+    --color-primary-hover: #fe9a47;
+    --color-brand-hover: #fe9a47;
+    --color-brand-active: #fabd2f;
+    --color-surface-high: #504945;
+    --color-surface-mid: #282828;
+    --color-surface-low: #32302f;
+    --color-surface-lowest: #1d2021;
+    --color-on-surface: #ebdbb2;
+    --color-on-primary-container: #fbf1c7;
+    --color-surface-primary-container: #504024;
+    --icon-green-fill-color: #b8bb26;
+    --color-danger: #fb4934;
+    --color-danger-color: #282828;
+    --keybinding-color: #928374;
+    --color-logo-text: #ebdbb2;
+    --button-destructive-bg-color: #5a1a14;
+    --button-destructive-color: #fb4934;
+    --color-border-outline: #665c54;
+    --color-border-outline-variant: #504945;
+    --scrollbar-thumb: #504945;
+    --scrollbar-thumb-hover: #665c54;
   }
 }

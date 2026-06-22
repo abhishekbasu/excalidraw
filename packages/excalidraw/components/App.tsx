@@ -423,8 +423,6 @@ import { isPointHittingTextAutoResizeHandle } from "../textAutoResizeHandle";
 import { textWysiwyg } from "../wysiwyg/textWysiwyg";
 import { isOverScrollBars } from "../scene/scrollbars";
 
-import { isMaybeMermaidDefinition } from "../mermaid";
-
 import { LassoTrail } from "../lasso";
 
 import { EraserTrail } from "../eraser";
@@ -3784,32 +3782,6 @@ class App extends React.Component<AppProps, AppState> {
     // ------------------- Only textual stuff remaining -------------------
     if (!data.text) {
       return;
-    }
-
-    // ------------------- Successful Mermaid -------------------
-    if (!isPlainPaste && isMaybeMermaidDefinition(data.text)) {
-      const api = await import("@excalidraw/mermaid-to-excalidraw");
-      try {
-        const { elements: skeletonElements, files = {} } =
-          await api.parseMermaidToExcalidraw(data.text);
-
-        const elements = convertToExcalidrawElements(skeletonElements, {
-          regenerateIds: true,
-        });
-
-        this.addElementsFromPasteOrLibrary({
-          elements,
-          files,
-          position:
-            this.editorInterface.formFactor === "desktop" ? "cursor" : "center",
-        });
-
-        return;
-      } catch (err: any) {
-        console.warn(
-          `parsing pasted text as mermaid definition failed: ${err.message}`,
-        );
-      }
     }
 
     // ------------------- Pure embeddable URLs -------------------
