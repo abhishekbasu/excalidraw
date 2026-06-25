@@ -1,4 +1,4 @@
-name: Build Docker image
+name: Build Podman image
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - release
 
 jobs:
-  build-docker:
+  build-podman:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-      - run: docker build -t excalidraw .
+      - run: podman build -t excalidraw .

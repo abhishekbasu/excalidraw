@@ -1,0 +1,31 @@
+name: Publish Podman
+
+on:
+  push:
+    branches:
+      - release
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/basudraw
+
+jobs:
+  publish-podman:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: Set up QEMU binfmt handlers (for cross-arch builds)
+        run: sudo apt-get update && sudo apt-get install -y qemu-user-static
+      - name: Login to GitHub Container Registry
+        run: podman login ghcr.io -u "${{ github.actor }}" --password-stdin <<< "${{ secrets.GITHUB_TOKEN }}"
+      - name: Build multi-arch manifest
+        run: |
+          podman manifest create "$IMAGE:latest"
+          podman build --jobs=0 --platform linux/amd64,linux/arm64,linux/arm/v7 \
+            --manifest "$IMAGE:latest" .
+      - name: Push manifest
+        run: podman manifest push --all "$IMAGE:latest" "docker://$IMAGE:latest"

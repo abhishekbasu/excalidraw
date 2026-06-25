@@ -1,4 +1,4 @@
-# SITE_ADDRESS is injected from the DOMAIN env var (see docker-compose.prod.yml).
+# SITE_ADDRESS is injected from the DOMAIN env var (see podman-compose.prod.yml).
 # - a domain (draw.example.com) => Caddy obtains/renews a Let's Encrypt cert.
 # - ":80"                       => plain HTTP, no cert (IP-only access).
 {$SITE_ADDRESS} {

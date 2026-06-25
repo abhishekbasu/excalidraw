@@ -3,13 +3,20 @@
 # Override variables on the command line, e.g.:
 #   make deploy DROPLET=root@203.0.113.10 DOMAIN=draw.example.com
 #
-# Local dev needs Node 18+ and yarn. Hosting needs only Docker on the target box:
+# Local dev needs Node 18+ and yarn. Hosting needs only Podman on the target box:
 # the static site is built here (or in CI) and shipped — never built on the box.
 
 DROPLET    ?=
 DOMAIN     ?=
 REMOTE_DIR ?= ~/basudraw
-COMPOSE    := docker compose -f docker-compose.prod.yml
+SSH_KEY    ?=
+COMPOSE    := podman compose -f podman-compose.prod.yml
+
+# When SSH_KEY is set, point ssh/scp/rsync at that private key.
+SSH_OPTS   := $(if $(SSH_KEY),-i $(SSH_KEY) -o IdentitiesOnly=yes,)
+SSH        := ssh $(SSH_OPTS)
+SCP        := scp $(SSH_OPTS)
+RSYNC_SSH  := $(if $(SSH_KEY),-e "ssh $(SSH_OPTS)",)
 
 .DEFAULT_GOAL := help
 
@@ -67,16 +74,16 @@ ps: ## Show stack status
 # Builds the static site HERE and ships only ./excalidraw-app/build + the
 # compose/Caddy config. The Droplet just runs Caddy — no Node, no build, tiny RAM.
 
-deploy: build ## Build locally + ship the static site to DROPLET. Requires DROPLET= (DOMAIN= for HTTPS)
+deploy: build ## Build locally + ship the static site to DROPLET. Requires DROPLET= (DOMAIN= for HTTPS, SSH_KEY= for a specific key)
 	@test -n "$(DROPLET)" || { echo "ERROR: set DROPLET=user@host (e.g. root@203.0.113.10)"; exit 1; }
-	ssh $(DROPLET) "mkdir -p $(REMOTE_DIR)/excalidraw-app/build"
+	$(SSH) $(DROPLET) "mkdir -p $(REMOTE_DIR)/excalidraw-app/build"
 	@echo ">> syncing static build to $(DROPLET):$(REMOTE_DIR)"
-	rsync -az --delete excalidraw-app/build/ $(DROPLET):$(REMOTE_DIR)/excalidraw-app/build/
-	scp docker-compose.prod.yml Caddyfile $(DROPLET):$(REMOTE_DIR)/
+	rsync -az --delete $(RSYNC_SSH) excalidraw-app/build/ $(DROPLET):$(REMOTE_DIR)/excalidraw-app/build/
+	$(SCP) podman-compose.prod.yml Caddyfile $(DROPLET):$(REMOTE_DIR)/
 	@echo ">> starting Caddy on the Droplet"
-	ssh $(DROPLET) "cd $(REMOTE_DIR) && DOMAIN='$(DOMAIN)' docker compose -f docker-compose.prod.yml up -d --remove-orphans"
+	$(SSH) $(DROPLET) "cd $(REMOTE_DIR) && DOMAIN='$(DOMAIN)' podman compose -f podman-compose.prod.yml up -d --remove-orphans"
 	@echo ">> done. Visit https://$(DOMAIN) (or http://<droplet-ip> if no DOMAIN set)."
 
-ssh: ## SSH into the Droplet (requires DROPLET=)
+ssh: ## SSH into the Droplet (requires DROPLET=, SSH_KEY= for a specific key)
 	@test -n "$(DROPLET)" || { echo "ERROR: set DROPLET=user@host"; exit 1; }
-	ssh $(DROPLET)
+	$(SSH) $(DROPLET)

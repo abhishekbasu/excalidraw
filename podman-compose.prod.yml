@@ -3,10 +3,10 @@
 # build locally (or in CI) with `make build` and ship ./excalidraw-app/build.
 #
 #   # HTTP only (access by IP):
-#   docker compose -f docker-compose.prod.yml up -d
+#   podman compose -f podman-compose.prod.yml up -d
 #
 #   # Automatic HTTPS (domain pointed at the box, ports 80/443 open):
-#   DOMAIN=draw.example.com docker compose -f docker-compose.prod.yml up -d
+#   DOMAIN=draw.example.com podman compose -f podman-compose.prod.yml up -d
 services:
   caddy:
     image: caddy:2-alpine

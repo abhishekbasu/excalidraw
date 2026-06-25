@@ -23,7 +23,7 @@ jobs:
             editor
             packages/excalidraw
             packages/utils
-            docker
+            podman
             repo
           ignoreLabels: |
             skip-semantic-title
